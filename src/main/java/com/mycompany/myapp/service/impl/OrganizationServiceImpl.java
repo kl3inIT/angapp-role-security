@@ -33,7 +33,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrganizationServiceImpl.class);
 
-    private static final String FETCH_PLAN_CODE = "organization-basic";
+    private static final String LIST_FETCH_PLAN_CODE = "organization-basic";
+
+    private static final String DETAIL_FETCH_PLAN_CODE = "organization-detail";
 
     private final OrganizationRepository organizationRepository;
 
@@ -67,7 +69,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization saved = organizationRepository.save(organization);
 
         // Enforce secure attribute view and fetch-plan on the response.
-        Map<String, Object> values = secureDataManager.loadOne(Organization.class, saved.getId(), FETCH_PLAN_CODE);
+        Map<String, Object> values = secureDataManager.loadOne(Organization.class, saved.getId(), DETAIL_FETCH_PLAN_CODE);
         return toDto(values);
     }
 
@@ -79,7 +81,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         payload.put("name", organizationDTO.getName());
         payload.put("description", organizationDTO.getDescription());
 
-        secureDataManager.save(Organization.class, organizationDTO.getId(), payload, FETCH_PLAN_CODE);
+        secureDataManager.save(Organization.class, organizationDTO.getId(), payload, DETAIL_FETCH_PLAN_CODE);
         if (organizationDTO.getEmployeeIds() != null) {
             Organization organization = organizationRepository
                 .findById(organizationDTO.getId())
@@ -88,7 +90,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationRepository.save(organization);
         }
 
-        Map<String, Object> values = secureDataManager.loadOne(Organization.class, organizationDTO.getId(), FETCH_PLAN_CODE);
+        Map<String, Object> values = secureDataManager.loadOne(Organization.class, organizationDTO.getId(), DETAIL_FETCH_PLAN_CODE);
         return toDto(values);
     }
 
@@ -107,7 +109,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
 
         if (!payload.isEmpty()) {
-            secureDataManager.save(Organization.class, organizationDTO.getId(), payload, FETCH_PLAN_CODE);
+            secureDataManager.save(Organization.class, organizationDTO.getId(), payload, DETAIL_FETCH_PLAN_CODE);
         }
 
         if (organizationDTO.getEmployeeIds() != null) {
@@ -118,7 +120,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organizationRepository.save(organization);
         }
 
-        Map<String, Object> values = secureDataManager.loadOne(Organization.class, organizationDTO.getId(), FETCH_PLAN_CODE);
+        Map<String, Object> values = secureDataManager.loadOne(Organization.class, organizationDTO.getId(), DETAIL_FETCH_PLAN_CODE);
         return Optional.of(toDto(values));
     }
 
@@ -126,7 +128,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Transactional(readOnly = true)
     public Page<OrganizationDTO> findAll(Pageable pageable) {
         LOG.debug("Request to get all Organizations");
-        return secureDataManager.loadPage(Organization.class, null, pageable, FETCH_PLAN_CODE).map(this::toDto);
+        return secureDataManager.loadPage(Organization.class, null, pageable, LIST_FETCH_PLAN_CODE).map(this::toDto);
     }
 
     @Override
@@ -134,7 +136,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Optional<OrganizationDTO> findOne(Long id) {
         LOG.debug("Request to get Organization : {}", id);
         try {
-            Map<String, Object> values = secureDataManager.loadOne(Organization.class, id, FETCH_PLAN_CODE);
+            Map<String, Object> values = secureDataManager.loadOne(Organization.class, id, DETAIL_FETCH_PLAN_CODE);
             return Optional.of(toDto(values));
         } catch (EntityNotFoundException e) {
             return Optional.empty();

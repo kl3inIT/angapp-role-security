@@ -34,3 +34,17 @@ fetch-plans:
       - name
       - name: emplList
         fetchPlan: org-empl-basic
+
+  - entity: com.mycompany.myapp.domain.Organization
+    name: organization-detail
+    properties:
+      - id
+      - code
+      - name
+      - name: emplList
+        properties:
+          - id
+          - name: employee
+            properties:
+              - id
+              - name

@@ -101,6 +101,13 @@
             <column name="definition_json" value='{"scalarAttributes":["id","name"],"references":{}}'/>
         </insert>
 
+        <insert tableName="sec_fetch_plan">
+            <column name="id" valueNumeric="7822"/>
+            <column name="code" value="organization-detail"/>
+            <column name="entity_name" value="Organization"/>
+            <column name="definition_json" value='{"scalarAttributes":["id","code","name"],"references":{"emplList":{"scalarAttributes":["id"],"references":{"employee":{"scalarAttributes":["id","name"],"references":{}}}}}}'/>
+        </insert>
+
         <update tableName="sec_fetch_plan">
             <column name="definition_json" value='{"scalarAttributes":["id","code","name"],"references":{"emplList":{"scalarAttributes":["id"],"references":{"employee":{"scalarAttributes":["id","name"],"references":{}}}}}}'/>
             <where>id = 7001</where>
@@ -119,6 +126,14 @@
             <column name="role_id" valueNumeric="5000"/>
             <column name="target_type" value="FETCH_PLAN"/>
             <column name="target" value="EMPLOYEE#employee-summary"/>
+            <column name="action" value="APPLY"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="7832"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="FETCH_PLAN"/>
+            <column name="target" value="ORGANIZATION#organization-detail"/>
             <column name="action" value="APPLY"/>
             <column name="effect" value="ALLOW"/>
         </insert>
