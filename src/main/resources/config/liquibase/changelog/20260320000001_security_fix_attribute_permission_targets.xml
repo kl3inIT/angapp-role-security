@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260320000001-1" author="assistant" context="dev,test">
+        <!-- Department attribute VIEW: use exact attribute tokens from fetch-plan JSON -->
+        <!-- ACCOUNTANT_ROLE (5000): VIEW id/name/code -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8100"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.id"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8101"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.name"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8102"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.code"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- ACCOUNTANT_ROLE (5000): EDIT name/code -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8103"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.name"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8104"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.code"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- STOCKKEEPER_ROLE (5001): VIEW id/name/code + EDIT name/code -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8200"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.id"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8201"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.name"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8202"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.code"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8203"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.name"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8204"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.code"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- DIRECTOR_ROLE (5002): VIEW id/name/code only -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8300"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.id"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8301"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.name"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8302"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="DEPARTMENT.code"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- Organization attribute VIEW/EDIT: use exact attribute tokens from fetch-plan JSON -->
+        <!-- ACCOUNTANT_ROLE (5000): VIEW id/code/name/description + EDIT code/name/description -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8400"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.id"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8401"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.code"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8402"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.name"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8403"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.description"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8404"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.code"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8405"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.name"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8406"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.description"/>
+            <column name="action" value="EDIT"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- DIRECTOR_ROLE (5002): VIEW only -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8500"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.id"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8501"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.code"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8502"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.name"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="8503"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGANIZATION.description"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
+

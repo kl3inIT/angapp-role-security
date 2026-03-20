@@ -1,0 +1,62 @@
+<div>
+  <h2 id="sec-permission-heading">Security permissions</h2>
+
+  <div class="d-flex justify-content-between mb-2">
+    <button class="btn btn-primary" [routerLink]="['/sec-permission/new']">
+      <fa-icon icon="plus"></fa-icon>
+      <span>Create permission</span>
+    </button>
+  </div>
+
+  <div class="table-responsive" *ngIf="secPermissions().length > 0; else noData">
+    <table class="table table-striped">
+      <thead>
+        <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+          <th scope="col" jhiSortBy="id">ID</th>
+          <th scope="col" jhiSortBy="roleCode">Role</th>
+          <th scope="col" jhiSortBy="targetType">Target type</th>
+          <th scope="col" jhiSortBy="target">Target</th>
+          <th scope="col" jhiSortBy="action">Action</th>
+          <th scope="col" jhiSortBy="effect">Effect</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of secPermissions(); trackBy: trackId">
+          <td>{{ p.id }}</td>
+          <td>{{ p.roleCode }}</td>
+          <td>{{ p.targetType }}</td>
+          <td>{{ p.target }}</td>
+          <td>{{ p.action }}</td>
+          <td>{{ p.effect }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-primary" [routerLink]="[p.id, 'edit']">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span>Edit</span>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="delete(p)">
+                <fa-icon icon="trash"></fa-icon>
+                <span>Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <div class="alert alert-warning">No permissions found</div>
+  </ng-template>
+
+  <div *ngIf="totalItems > 0" class="d-flex justify-content-between align-items-center">
+    <jhi-item-count [params]="{ page, totalItems, itemsPerPage }"></jhi-item-count>
+    <ngb-pagination
+      [collectionSize]="totalItems"
+      [(page)]="page"
+      [pageSize]="itemsPerPage"
+      (pageChange)="navigateToPage($event)"
+    ></ngb-pagination>
+  </div>
+</div>

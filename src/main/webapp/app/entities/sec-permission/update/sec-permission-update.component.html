@@ -1,0 +1,47 @@
+<div>
+  <h2 id="sec-permission-heading">Security permission</h2>
+
+  <form [formGroup]="editForm" (ngSubmit)="save()">
+    <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+      <label>ID</label>
+      <input type="text" class="form-control" formControlName="id" readonly />
+    </div>
+
+    <div class="mb-3">
+      <label for="field_roleCode">Role code</label>
+      <input id="field_roleCode" type="text" class="form-control" formControlName="roleCode" />
+    </div>
+
+    <div class="mb-3">
+      <label for="field_targetType">Target type</label>
+      <select id="field_targetType" class="form-select" formControlName="targetType">
+        <option *ngFor="let t of targetTypes" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="field_target">Target</label>
+      <input id="field_target" type="text" class="form-control" formControlName="target" />
+    </div>
+
+    <div class="mb-3">
+      <label for="field_action">Action</label>
+      <input id="field_action" type="text" class="form-control" formControlName="action" />
+    </div>
+
+    <div class="mb-3">
+      <label for="field_effect">Effect</label>
+      <select id="field_effect" class="form-select" formControlName="effect">
+        <option *ngFor="let e of effects" [value]="e">{{ e }}</option>
+      </select>
+    </div>
+
+    <div class="mt-3">
+      <button type="button" class="btn btn-secondary" (click)="previousState()">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || isSaving">
+        <span *ngIf="!isSaving">Save</span>
+        <span *ngIf="isSaving">Saving...</span>
+      </button>
+    </div>
+  </form>
+</div>

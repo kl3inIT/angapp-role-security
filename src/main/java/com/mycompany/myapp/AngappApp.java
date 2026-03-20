@@ -16,12 +16,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication(exclude = { H2ConsoleAutoConfiguration.class })
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
+@ComponentScan({ "com.mycompany.myapp", "com.mycompany.core" })
 public class AngappApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(AngappApp.class);

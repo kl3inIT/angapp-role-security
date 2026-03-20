@@ -1,0 +1,60 @@
+<div>
+  <h2 id="sec-fetch-plan-heading">Fetch plans</h2>
+
+  <div class="d-flex justify-content-between mb-2">
+    <button class="btn btn-primary" [routerLink]="['/sec-fetch-plan/new']">
+      <fa-icon icon="plus"></fa-icon>
+      <span>Create fetch plan</span>
+    </button>
+  </div>
+
+  <div class="table-responsive" *ngIf="plans().length > 0; else noData">
+    <table class="table table-striped">
+      <thead>
+        <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+          <th scope="col" jhiSortBy="id">ID</th>
+          <th scope="col" jhiSortBy="code">Code</th>
+          <th scope="col" jhiSortBy="entityName">Entity</th>
+          <th scope="col">Definition</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of plans(); trackBy: trackId">
+          <td>{{ p.id }}</td>
+          <td>{{ p.code }}</td>
+          <td>{{ p.entityName }}</td>
+          <td>
+            <code>{{ p.definitionJson | slice: 0 : 60 }}{{ p.definitionJson && p.definitionJson.length > 60 ? '...' : '' }}</code>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-primary" [routerLink]="[p.id, 'edit']">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span>Edit</span>
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="delete(p)">
+                <fa-icon icon="trash"></fa-icon>
+                <span>Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <div class="alert alert-warning">No fetch plans found</div>
+  </ng-template>
+
+  <div *ngIf="totalItems > 0" class="d-flex justify-content-between align-items-center">
+    <jhi-item-count [params]="{ page, totalItems, itemsPerPage }"></jhi-item-count>
+    <ngb-pagination
+      [collectionSize]="totalItems"
+      [(page)]="page"
+      [pageSize]="itemsPerPage"
+      (pageChange)="navigateToPage($event)"
+    ></ngb-pagination>
+  </div>
+</div>

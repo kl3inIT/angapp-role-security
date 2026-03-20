@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260319000100-1" author="assistant">
+        <createTable tableName="sec_role">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_sec_role_code"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20260319000100-2" author="assistant">
+        <createTable tableName="sec_permission">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="action" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="effect" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="sec_permission"
+                                 constraintName="fk_sec_permission_role"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sec_role"/>
+    </changeSet>
+
+    <changeSet id="20260319000100-3" author="assistant">
+        <createTable tableName="sec_row_policy">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_sec_row_policy_code"/>
+            </column>
+            <column name="entity_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operation" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="policy_type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expression" type="varchar(1000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20260319000100-4" author="assistant">
+        <createTable tableName="sec_fetch_plan">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_sec_fetch_plan_code"/>
+            </column>
+            <column name="entity_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="definition_json" type="${clobType}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
+

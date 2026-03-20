@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (organization(); as organizationRef) {
+      <div>
+        <h2 data-cy="organizationDetailsHeading"><span jhiTranslate="angappApp.organization.detail.title">Organization</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ organizationRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="angappApp.organization.code">Code</span></dt>
+          <dd>
+            <span>{{ organizationRef.code }}</span>
+          </dd>
+          <dt><span jhiTranslate="angappApp.organization.name">Name</span></dt>
+          <dd>
+            <span>{{ organizationRef.name }}</span>
+          </dd>
+          <dt><span jhiTranslate="angappApp.organization.description">Description</span></dt>
+          <dd>
+            <span>{{ organizationRef.description }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/organization', organizationRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

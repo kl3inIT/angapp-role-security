@@ -19,6 +19,12 @@
     <property name="timeType" value="time" dbms="oracle"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260311162628_added_entity_Department.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260316001902_added_entity_Organization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260319000100_security_metadata.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260319001000_security_seed_roles_permissions.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260320000000_security_seed_fetch_plans_and_attribute_permissions.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260320000001_security_fix_attribute_permission_targets.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260319001000-1" author="assistant">
+        <!-- Seed roles -->
+        <insert tableName="sec_role">
+            <column name="id" valueNumeric="5000"/>
+            <column name="code" value="ACCOUNTANT_ROLE"/>
+            <column name="name" value="AcoountantRole"/>
+            <column name="type" value="RESOURCE"/>
+        </insert>
+
+        <insert tableName="sec_role">
+            <column name="id" valueNumeric="5001"/>
+            <column name="code" value="STOCKKEEPER_ROLE"/>
+            <column name="name" value="StockeeperRole"/>
+            <column name="type" value="RESOURCE"/>
+        </insert>
+
+        <insert tableName="sec_role">
+            <column name="id" valueNumeric="5002"/>
+            <column name="code" value="DIRECTOR_ROLE"/>
+            <column name="name" value="DirectorRole"/>
+            <column name="type" value="RESOURCE"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20260319001000-2" author="assistant">
+        <!-- ACCOUNTANT_ROLE: full CRUD on Organization and Department -->
+        <!-- Organization -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5100"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="ORGANIZATION"/>
+            <column name="action" value="READ"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5101"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="ORGANIZATION"/>
+            <column name="action" value="CREATE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5102"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="ORGANIZATION"/>
+            <column name="action" value="UPDATE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5103"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="ORGANIZATION"/>
+            <column name="action" value="DELETE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- Department -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5110"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="READ"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5111"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="CREATE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5112"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="UPDATE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5113"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="DELETE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- STOCKKEEPER_ROLE: CRUD on Department -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5120"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="READ"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5121"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="CREATE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5122"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="UPDATE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5123"/>
+            <column name="role_id" valueNumeric="5001"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="DELETE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- DIRECTOR_ROLE: READ + DELETE on Organization and Department -->
+        <!-- Organization -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5130"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="ORGANIZATION"/>
+            <column name="action" value="READ"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5131"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="ORGANIZATION"/>
+            <column name="action" value="DELETE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <!-- Department -->
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5140"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="READ"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="5141"/>
+            <column name="role_id" valueNumeric="5002"/>
+            <column name="target_type" value="ENTITY"/>
+            <column name="target" value="DEPARTMENT"/>
+            <column name="action" value="DELETE"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20260319001000-3" author="assistant" context="dev,test">
+        <!-- Map application Spring Security authorities to security engine roles via authority names.
+             admin -> STOCKKEEPER_ROLE
+             user  -> ACCOUNTANT_ROLE -->
+
+        <!-- Add new authorities that correspond to our role codes -->
+        <insert tableName="jhi_authority">
+            <column name="name" value="STOCKKEEPER_ROLE"/>
+        </insert>
+        <insert tableName="jhi_authority">
+            <column name="name" value="ACCOUNTANT_ROLE"/>
+        </insert>
+
+        <!-- admin user (id=1) gets STOCKKEEPER_ROLE -->
+        <insert tableName="jhi_user_authority">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="authority_name" value="STOCKKEEPER_ROLE"/>
+        </insert>
+
+        <!-- user (id=2) gets ACCOUNTANT_ROLE -->
+        <insert tableName="jhi_user_authority">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="authority_name" value="ACCOUNTANT_ROLE"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
+

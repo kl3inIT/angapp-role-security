@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.h2.H2ConsoleProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,8 @@ import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 
 @Configuration
-@EnableJpaRepositories({ "com.mycompany.myapp.repository" })
+@EnableJpaRepositories({ "com.mycompany.myapp.repository", "com.mycompany.core.security.repository" })
+@EntityScan({ "com.mycompany.myapp.domain", "com.mycompany.core.security.domain" })
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 @EnableConfigurationProperties(H2ConsoleProperties.class)
