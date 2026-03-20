@@ -1,21 +1,17 @@
 package com.mycompany.core.fetch;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * Simple representation of a fetch plan for an entity.
- * <p>
- * It defines which scalar attributes and referenced objects should be loaded.
+ * Simplified Jmix-like fetch plan model backed by named properties.
  */
 public class FetchPlan {
 
     private String code;
     private Class<?> entityClass;
-    private Set<String> scalarAttributes = new LinkedHashSet<>();
-    private Map<String, FetchPlan> references = new LinkedHashMap<>();
+    private final Map<String, FetchPlanProperty> properties = new LinkedHashMap<>();
 
     public String getCode() {
         return code;
@@ -33,19 +29,27 @@ public class FetchPlan {
         this.entityClass = entityClass;
     }
 
-    public Set<String> getScalarAttributes() {
-        return scalarAttributes;
+    public Collection<FetchPlanProperty> getProperties() {
+        return properties.values();
     }
 
-    public void setScalarAttributes(Set<String> scalarAttributes) {
-        this.scalarAttributes = scalarAttributes;
+    public Map<String, FetchPlanProperty> getPropertiesMap() {
+        return properties;
     }
 
-    public Map<String, FetchPlan> getReferences() {
-        return references;
+    public FetchPlanProperty getProperty(String name) {
+        return properties.get(name);
     }
 
-    public void setReferences(Map<String, FetchPlan> references) {
-        this.references = references;
+    public boolean containsProperty(String name) {
+        return properties.containsKey(name);
+    }
+
+    public void addProperty(String name) {
+        properties.put(name, new FetchPlanProperty(name, null));
+    }
+
+    public void addProperty(String name, FetchPlan nestedFetchPlan) {
+        properties.put(name, new FetchPlanProperty(name, nestedFetchPlan));
     }
 }

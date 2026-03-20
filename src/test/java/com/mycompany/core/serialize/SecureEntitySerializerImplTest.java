@@ -20,8 +20,8 @@ class SecureEntitySerializerImplTest {
 
         SecureEntitySerializerImpl serializer = new SecureEntitySerializerImpl(attributePermissionEvaluator);
         FetchPlan fetchPlan = new FetchPlan();
-        fetchPlan.getScalarAttributes().add("id");
-        fetchPlan.getScalarAttributes().add("name");
+        fetchPlan.addProperty("id");
+        fetchPlan.addProperty("name");
 
         SecureEntityView view = serializer.serialize(new TestEntity(7L, "visible"), fetchPlan);
 
@@ -36,11 +36,11 @@ class SecureEntitySerializerImplTest {
 
         SecureEntitySerializerImpl serializer = new SecureEntitySerializerImpl(attributePermissionEvaluator);
         FetchPlan childPlan = new FetchPlan();
-        childPlan.getScalarAttributes().add("name");
+        childPlan.addProperty("name");
 
         FetchPlan parentPlan = new FetchPlan();
-        parentPlan.getScalarAttributes().add("id");
-        parentPlan.getReferences().put("children", childPlan);
+        parentPlan.addProperty("id");
+        parentPlan.addProperty("children", childPlan);
 
         SecureEntityView view = serializer.serialize(new TestParent(11L, List.of(new TestChild("A"), new TestChild("B"))), parentPlan);
 

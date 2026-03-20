@@ -29,11 +29,13 @@ class YamlFetchPlanRepositoryTest {
     void shouldResolveCustomPlanExtendingBase() {
         FetchPlan plan = repository.findByEntityAndCode(TestOrder.class, "summary").orElseThrow();
 
-        assertThat(plan.getScalarAttributes()).contains("id", "number");
-        assertThat(plan.getReferences()).containsKeys("customer", "lines");
-        assertThat(plan.getReferences().get("customer").getScalarAttributes()).contains("id", "name");
-        assertThat(plan.getReferences().get("lines").getScalarAttributes()).contains("id", "quantity");
-        assertThat(plan.getReferences().get("lines").getReferences().get("product").getScalarAttributes()).contains("id", "name");
+        assertThat(plan.getPropertiesMap()).containsKeys("id", "number", "customer", "lines");
+        assertThat(plan.getProperty("customer").getFetchPlan().getPropertiesMap()).containsKeys("id", "name");
+        assertThat(plan.getProperty("lines").getFetchPlan().getPropertiesMap()).containsKeys("id", "quantity", "product");
+        assertThat(plan.getProperty("lines").getFetchPlan().getProperty("product").getFetchPlan().getPropertiesMap()).containsKeys(
+            "id",
+            "name"
+        );
     }
 
     @Test

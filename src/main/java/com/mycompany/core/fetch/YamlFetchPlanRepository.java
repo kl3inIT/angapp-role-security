@@ -31,7 +31,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Shared fetch plan repository backed by a classpath YAML file.
- * Supports named plans, built-in plans and basic Jmix-like {@code extends}.
+ * Supports named plans and nested inline properties.
  */
 @Repository
 public class YamlFetchPlanRepository implements FetchPlanRepository {
@@ -143,7 +143,7 @@ public class YamlFetchPlanRepository implements FetchPlanRepository {
     ) {
         PropertyMetadata metadata = describeProperty(entityClass, propertyName);
         if (!metadata.reference()) {
-            plan.getScalarAttributes().add(propertyName);
+            plan.addProperty(propertyName);
             return;
         }
 
@@ -165,31 +165,37 @@ public class YamlFetchPlanRepository implements FetchPlanRepository {
             );
         }
 
-        plan.getReferences().put(propertyName, nestedPlan);
+        plan.addProperty(propertyName, nestedPlan);
     }
 
     private void mergeInto(FetchPlan target, FetchPlan source) {
-        target.getScalarAttributes().addAll(source.getScalarAttributes());
-
         source
-            .getReferences()
-            .forEach((name, nestedSource) -> {
-                FetchPlan existing = target.getReferences().get(name);
+            .getPropertiesMap()
+            .forEach((name, sourceProperty) -> {
+                FetchPlanProperty existing = target.getProperty(name);
                 if (existing == null) {
-                    target.getReferences().put(name, copyOf(nestedSource));
+                    target.getPropertiesMap().put(name, copyOf(sourceProperty));
                     return;
                 }
 
-                mergeInto(existing, nestedSource);
+                if (existing.getFetchPlan() != null && sourceProperty.getFetchPlan() != null) {
+                    mergeInto(existing.getFetchPlan(), sourceProperty.getFetchPlan());
+                }
             });
+    }
+
+    private FetchPlanProperty copyOf(FetchPlanProperty source) {
+        if (!source.isReference()) {
+            return new FetchPlanProperty(source.getName(), null);
+        }
+        return new FetchPlanProperty(source.getName(), copyOf(source.getFetchPlan()));
     }
 
     private FetchPlan copyOf(FetchPlan source) {
         FetchPlan copy = new FetchPlan();
         copy.setCode(source.getCode());
         copy.setEntityClass(source.getEntityClass());
-        copy.getScalarAttributes().addAll(source.getScalarAttributes());
-        source.getReferences().forEach((name, nested) -> copy.getReferences().put(name, copyOf(nested)));
+        source.getPropertiesMap().forEach((name, property) -> copy.getPropertiesMap().put(name, copyOf(property)));
         return copy;
     }
 

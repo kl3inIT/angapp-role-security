@@ -31,39 +31,37 @@ public class DbFetchPlanRepository implements FetchPlanRepository {
     }
 
     private FetchPlan toFetchPlan(SecFetchPlan sec) {
-        FetchPlan fp = new FetchPlan();
-        fp.setCode(sec.getCode());
+        FetchPlan fetchPlan = new FetchPlan();
+        fetchPlan.setCode(sec.getCode());
         try {
             JsonNode root = objectMapper.readTree(sec.getDefinitionJson());
-
-            // scalarAttributes
-            JsonNode scalars = root.path("scalarAttributes");
-            if (scalars.isArray()) {
-                for (JsonNode n : scalars) {
-                    fp.getScalarAttributes().add(n.asText());
-                }
-            }
-
-            // references
-            JsonNode refs = root.path("references");
-            if (refs.isObject()) {
-                Iterator<Map.Entry<String, JsonNode>> fields = refs.fields();
-                while (fields.hasNext()) {
-                    Map.Entry<String, JsonNode> e = fields.next();
-                    FetchPlan nested = new FetchPlan();
-                    nested.setCode(e.getKey());
-                    JsonNode nestedScalars = e.getValue().path("scalarAttributes");
-                    if (nestedScalars.isArray()) {
-                        for (JsonNode n : nestedScalars) {
-                            nested.getScalarAttributes().add(n.asText());
-                        }
-                    }
-                    fp.getReferences().put(e.getKey(), nested);
-                }
-            }
+            populateFetchPlan(fetchPlan, root);
+            return fetchPlan;
         } catch (IOException e) {
             throw new IllegalArgumentException("Invalid fetch plan JSON for code " + sec.getCode(), e);
         }
-        return fp;
+    }
+
+    private void populateFetchPlan(FetchPlan fetchPlan, JsonNode root) {
+        JsonNode scalars = root.path("scalarAttributes");
+        if (scalars.isArray()) {
+            for (JsonNode scalar : scalars) {
+                fetchPlan.addProperty(scalar.asText());
+            }
+        }
+
+        JsonNode references = root.path("references");
+        if (!references.isObject()) {
+            return;
+        }
+
+        Iterator<Map.Entry<String, JsonNode>> fields = references.fields();
+        while (fields.hasNext()) {
+            Map.Entry<String, JsonNode> entry = fields.next();
+            FetchPlan nested = new FetchPlan();
+            nested.setCode(entry.getKey());
+            populateFetchPlan(nested, entry.getValue());
+            fetchPlan.addProperty(entry.getKey(), nested);
+        }
     }
 }
