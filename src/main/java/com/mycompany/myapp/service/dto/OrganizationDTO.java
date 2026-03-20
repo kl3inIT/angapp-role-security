@@ -1,13 +1,16 @@
 package com.mycompany.myapp.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Organization} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrganizationDTO implements Serializable {
 
     private Long id;
@@ -19,6 +22,10 @@ public class OrganizationDTO implements Serializable {
     private String name;
 
     private String description;
+
+    private List<Long> employeeIds;
+
+    private List<EmployeeDTO> employees;
 
     public Long getId() {
         return id;
@@ -50,6 +57,22 @@ public class OrganizationDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Long> getEmployeeIds() {
+        return employeeIds;
+    }
+
+    public void setEmployeeIds(List<Long> employeeIds) {
+        this.employeeIds = employeeIds;
+    }
+
+    public List<EmployeeDTO> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<EmployeeDTO> employees) {
+        this.employees = employees;
     }
 
     @Override

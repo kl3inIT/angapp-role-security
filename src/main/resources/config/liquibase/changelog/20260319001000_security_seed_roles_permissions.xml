@@ -98,6 +98,7 @@
             <column name="effect" value="ALLOW"/>
         </insert>
 
+
         <!-- STOCKKEEPER_ROLE: CRUD on Department -->
         <insert tableName="sec_permission">
             <column name="id" valueNumeric="5120"/>
@@ -196,4 +197,3 @@
         </insert>
     </changeSet>
 </databaseChangeLog>
-

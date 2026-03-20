@@ -225,3 +225,6 @@ jhipster:
 # ===================================================================
 
 # application:
+application:
+  fetch-plans:
+    config: classpath:fetch-plans.yml

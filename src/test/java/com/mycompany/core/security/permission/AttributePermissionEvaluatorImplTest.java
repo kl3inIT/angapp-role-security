@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.mycompany.core.security.core.SecurityService;
+import com.mycompany.myapp.domain.Organization;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,11 +25,9 @@ class AttributePermissionEvaluatorImplTest {
 
         AttributePermissionEvaluatorImpl evaluator = new AttributePermissionEvaluatorImpl(rolePermissionService, securityService);
 
-        boolean permitted = evaluator.canView(TestOrganization.class, "code");
+        boolean permitted = evaluator.canView(Organization.class, "code");
 
         assertThat(permitted).isTrue();
         verify(rolePermissionService).hasPermission(anyCollection(), eq(TargetType.ATTRIBUTE), eq("ORGANIZATION.CODE"), eq("VIEW"));
     }
-
-    private static final class TestOrganization {}
 }

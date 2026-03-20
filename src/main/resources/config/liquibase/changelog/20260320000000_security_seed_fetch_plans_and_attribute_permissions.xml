@@ -157,7 +157,6 @@
             <column name="action" value="EDIT"/>
             <column name="effect" value="ALLOW"/>
         </insert>
-
         <!-- DIRECTOR_ROLE (5002) -> VIEW only -->
         <insert tableName="sec_permission">
             <column name="id" valueNumeric="7500"/>
@@ -183,6 +182,7 @@
             <column name="action" value="VIEW"/>
             <column name="effect" value="ALLOW"/>
         </insert>
+
 
         <!-- Optional: fetch plan APPLY permission (only used if FetchPlanConstraint is present) -->
         <!-- Department -->
@@ -231,4 +231,3 @@
     </changeSet>
 
 </databaseChangeLog>
-

@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,6 +35,17 @@ public class Organization implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrgEmpl> emplList = new ArrayList<>();
+
+    public List<OrgEmpl> getEmplList() {
+        return emplList;
+    }
+
+    public void setEmplList(List<OrgEmpl> emplList) {
+        this.emplList = emplList;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 

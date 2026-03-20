@@ -2,6 +2,9 @@ package com.mycompany.core.serialize;
 
 import com.mycompany.core.fetch.FetchPlan;
 import com.mycompany.core.security.permission.AttributePermissionEvaluator;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import org.springframework.beans.BeanWrapper;
@@ -44,6 +47,10 @@ public class SecureEntitySerializerImpl implements SecureEntitySerializer {
             Object refValue = wrapper.getPropertyValue(attr);
             if (refValue == null) {
                 view.put(attr, null);
+            } else if (refValue instanceof Collection<?> collection) {
+                view.put(attr, collection.stream().map(item -> serialize(item, ref.getValue()).getValues()).toList());
+            } else if (refValue.getClass().isArray()) {
+                view.put(attr, serializeArray(refValue, ref.getValue()));
             } else {
                 view.put(attr, serialize(refValue, ref.getValue()).getValues());
             }
@@ -54,5 +61,14 @@ public class SecureEntitySerializerImpl implements SecureEntitySerializer {
 
     private boolean isAlwaysVisible(String attr) {
         return "id".equals(attr.toLowerCase(Locale.ROOT));
+    }
+
+    private Collection<Map<String, Object>> serializeArray(Object array, FetchPlan fetchPlan) {
+        int length = Array.getLength(array);
+        Collection<Map<String, Object>> values = new ArrayList<>(length);
+        for (int i = 0; i < length; i++) {
+            values.add(serialize(Array.get(array, i), fetchPlan).getValues());
+        }
+        return values;
     }
 }

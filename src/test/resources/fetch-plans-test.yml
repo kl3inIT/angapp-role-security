@@ -1,0 +1,26 @@
+fetch-plans:
+  - entity: com.mycompany.core.fetch.YamlFetchPlanRepositoryTest$TestCustomer
+    name: customer-minimal
+    properties:
+      - id
+      - name
+
+  - entity: com.mycompany.core.fetch.YamlFetchPlanRepositoryTest$TestProduct
+    name: product-minimal
+    properties:
+      - id
+      - name
+
+  - entity: com.mycompany.core.fetch.YamlFetchPlanRepositoryTest$TestOrder
+    name: summary
+    properties:
+      - id
+      - number
+      - name: customer
+        fetchPlan: customer-minimal
+      - name: lines
+        properties:
+          - id
+          - quantity
+          - name: product
+            fetchPlan: product-minimal

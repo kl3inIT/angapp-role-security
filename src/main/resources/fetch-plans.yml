@@ -1,0 +1,36 @@
+fetch-plans:
+  - entity: com.mycompany.myapp.domain.Department
+    name: department-basic
+    properties:
+      - id
+      - name
+      - code
+
+  - entity: com.mycompany.myapp.domain.Employee
+    name: employee-basic
+    properties:
+      - id
+      - code
+      - name
+
+  - entity: com.mycompany.myapp.domain.Employee
+    name: employee-summary
+    properties:
+      - id
+      - name
+
+  - entity: com.mycompany.myapp.domain.OrgEmpl
+    name: org-empl-basic
+    properties:
+      - id
+      - name: employee
+        fetchPlan: employee-summary
+
+  - entity: com.mycompany.myapp.domain.Organization
+    name: organization-basic
+    properties:
+      - id
+      - code
+      - name
+      - name: emplList
+        fetchPlan: org-empl-basic

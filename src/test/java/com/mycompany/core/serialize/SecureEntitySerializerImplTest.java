@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.mycompany.core.fetch.FetchPlan;
 import com.mycompany.core.security.permission.AttributePermissionEvaluator;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,25 @@ class SecureEntitySerializerImplTest {
         assertThat(view.getValues()).isEqualTo(Map.of("id", 7L, "name", "visible"));
     }
 
+    @Test
+    void shouldSerializeCollectionReferencesUsingNestedFetchPlan() {
+        AttributePermissionEvaluator attributePermissionEvaluator = mock(AttributePermissionEvaluator.class);
+        when(attributePermissionEvaluator.canView(TestParent.class, "children")).thenReturn(true);
+        when(attributePermissionEvaluator.canView(TestChild.class, "name")).thenReturn(true);
+
+        SecureEntitySerializerImpl serializer = new SecureEntitySerializerImpl(attributePermissionEvaluator);
+        FetchPlan childPlan = new FetchPlan();
+        childPlan.getScalarAttributes().add("name");
+
+        FetchPlan parentPlan = new FetchPlan();
+        parentPlan.getScalarAttributes().add("id");
+        parentPlan.getReferences().put("children", childPlan);
+
+        SecureEntityView view = serializer.serialize(new TestParent(11L, List.of(new TestChild("A"), new TestChild("B"))), parentPlan);
+
+        assertThat(view.getValues()).isEqualTo(Map.of("id", 11L, "children", List.of(Map.of("name", "A"), Map.of("name", "B"))));
+    }
+
     private static final class TestEntity {
 
         private final Long id;
@@ -39,6 +59,38 @@ class SecureEntitySerializerImplTest {
 
         public Long getId() {
             return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    private static final class TestParent {
+
+        private final Long id;
+        private final List<TestChild> children;
+
+        private TestParent(Long id, List<TestChild> children) {
+            this.id = id;
+            this.children = children;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public List<TestChild> getChildren() {
+            return children;
+        }
+    }
+
+    private static final class TestChild {
+
+        private final String name;
+
+        private TestChild(String name) {
+            this.name = name;
         }
 
         public String getName() {

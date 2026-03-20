@@ -117,6 +117,7 @@ configurations {
 }
 
 dependencies {
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {

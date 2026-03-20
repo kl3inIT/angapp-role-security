@@ -1,13 +1,20 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.core.data.SecureDataManager;
+import com.mycompany.myapp.domain.Employee;
+import com.mycompany.myapp.domain.OrgEmpl;
 import com.mycompany.myapp.domain.Organization;
+import com.mycompany.myapp.repository.EmployeeRepository;
+import com.mycompany.myapp.repository.OrgEmplRepository;
 import com.mycompany.myapp.repository.OrganizationRepository;
 import com.mycompany.myapp.service.OrganizationService;
+import com.mycompany.myapp.service.dto.EmployeeDTO;
 import com.mycompany.myapp.service.dto.OrganizationDTO;
 import com.mycompany.myapp.service.mapper.OrganizationMapper;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -32,15 +39,23 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationMapper organizationMapper;
 
+    private final EmployeeRepository employeeRepository;
+
+    private final OrgEmplRepository orgEmplRepository;
+
     private final SecureDataManager secureDataManager;
 
     public OrganizationServiceImpl(
         OrganizationRepository organizationRepository,
         OrganizationMapper organizationMapper,
+        EmployeeRepository employeeRepository,
+        OrgEmplRepository orgEmplRepository,
         SecureDataManager secureDataManager
     ) {
         this.organizationRepository = organizationRepository;
         this.organizationMapper = organizationMapper;
+        this.employeeRepository = employeeRepository;
+        this.orgEmplRepository = orgEmplRepository;
         this.secureDataManager = secureDataManager;
     }
 
@@ -48,6 +63,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
         LOG.debug("Request to save Organization : {}", organizationDTO);
         Organization organization = organizationMapper.toEntity(organizationDTO);
+        syncEmployees(organization, organizationDTO.getEmployeeIds());
         Organization saved = organizationRepository.save(organization);
 
         // Enforce secure attribute view and fetch-plan on the response.
@@ -63,7 +79,16 @@ public class OrganizationServiceImpl implements OrganizationService {
         payload.put("name", organizationDTO.getName());
         payload.put("description", organizationDTO.getDescription());
 
-        Map<String, Object> values = secureDataManager.save(Organization.class, organizationDTO.getId(), payload, FETCH_PLAN_CODE);
+        secureDataManager.save(Organization.class, organizationDTO.getId(), payload, FETCH_PLAN_CODE);
+        if (organizationDTO.getEmployeeIds() != null) {
+            Organization organization = organizationRepository
+                .findById(organizationDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Organization not found"));
+            syncEmployees(organization, organizationDTO.getEmployeeIds());
+            organizationRepository.save(organization);
+        }
+
+        Map<String, Object> values = secureDataManager.loadOne(Organization.class, organizationDTO.getId(), FETCH_PLAN_CODE);
         return toDto(values);
     }
 
@@ -81,7 +106,19 @@ public class OrganizationServiceImpl implements OrganizationService {
             payload.put("description", organizationDTO.getDescription());
         }
 
-        Map<String, Object> values = secureDataManager.save(Organization.class, organizationDTO.getId(), payload, FETCH_PLAN_CODE);
+        if (!payload.isEmpty()) {
+            secureDataManager.save(Organization.class, organizationDTO.getId(), payload, FETCH_PLAN_CODE);
+        }
+
+        if (organizationDTO.getEmployeeIds() != null) {
+            Organization organization = organizationRepository
+                .findById(organizationDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Organization not found"));
+            syncEmployees(organization, organizationDTO.getEmployeeIds());
+            organizationRepository.save(organization);
+        }
+
+        Map<String, Object> values = secureDataManager.loadOne(Organization.class, organizationDTO.getId(), FETCH_PLAN_CODE);
         return Optional.of(toDto(values));
     }
 
@@ -115,7 +152,31 @@ public class OrganizationServiceImpl implements OrganizationService {
         dto.setId(asLong(values.get("id")));
         dto.setCode((String) values.get("code"));
         dto.setName((String) values.get("name"));
-        dto.setDescription((String) values.get("description"));
+        if (values.containsKey("description")) {
+            dto.setDescription((String) values.get("description"));
+        }
+        Object rawEmployees = values.get("emplList");
+        if (rawEmployees instanceof List<?> employees) {
+            dto.setEmployees(
+                employees.stream().filter(Map.class::isInstance).map(Map.class::cast).map(this::toEmployeeDtoFromLink).toList()
+            );
+        }
+        return dto;
+    }
+
+    private EmployeeDTO toEmployeeDtoFromLink(Map<?, ?> values) {
+        Object employee = values.get("employee");
+        if (!(employee instanceof Map<?, ?> employeeValues)) {
+            return null;
+        }
+        return toEmployeeDto(employeeValues);
+    }
+
+    private EmployeeDTO toEmployeeDto(Map<?, ?> values) {
+        EmployeeDTO dto = new EmployeeDTO();
+        dto.setId(asLong(values.get("id")));
+        dto.setCode((String) values.get("code"));
+        dto.setName((String) values.get("name"));
         return dto;
     }
 
@@ -130,5 +191,25 @@ public class OrganizationServiceImpl implements OrganizationService {
             return n.longValue();
         }
         return Long.valueOf(value.toString());
+    }
+
+    private void syncEmployees(Organization organization, List<Long> employeeIds) {
+        List<Long> distinctIds = employeeIds == null ? List.of() : employeeIds.stream().distinct().toList();
+        List<Employee> employees = employeeRepository.findAllById(distinctIds);
+        if (employees.size() != distinctIds.size()) {
+            throw new EntityNotFoundException("One or more employees not found");
+        }
+
+        if (!organization.getEmplList().isEmpty()) {
+            orgEmplRepository.deleteAll(new ArrayList<>(organization.getEmplList()));
+            organization.getEmplList().clear();
+        }
+
+        for (Employee employee : employees) {
+            OrgEmpl link = new OrgEmpl();
+            link.setOrganization(organization);
+            link.setEmployee(employee);
+            organization.getEmplList().add(link);
+        }
     }
 }

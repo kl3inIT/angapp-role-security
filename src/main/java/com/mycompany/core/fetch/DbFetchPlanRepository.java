@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Repository;
  * table containing JSON definitions.
  */
 @Repository
-@Primary
 public class DbFetchPlanRepository implements FetchPlanRepository {
 
     private final SecFetchPlanRepository secFetchPlanRepository;

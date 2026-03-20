@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260320010000-1" author="codex">
+        <createTable tableName="employee">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="org_empl">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="organization_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="employee_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+            baseTableName="org_empl"
+            baseColumnNames="organization_id"
+            constraintName="fk_org_empl__organization"
+            referencedTableName="jhi_organization"
+            referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+            baseTableName="org_empl"
+            baseColumnNames="employee_id"
+            constraintName="fk_org_empl__employee"
+            referencedTableName="employee"
+            referencedColumnNames="id"/>
+
+        <addUniqueConstraint
+            tableName="org_empl"
+            columnNames="organization_id, employee_id"
+            constraintName="ux_org_empl__organization_employee"/>
+    </changeSet>
+
+    <changeSet id="20260320010000-2" author="codex" context="dev,test">
+        <insert tableName="employee">
+            <column name="id" valueNumeric="9001"/>
+            <column name="code" value="EMP-001"/>
+            <column name="name" value="Alice Accountant"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="employee">
+            <column name="id" valueNumeric="9002"/>
+            <column name="code" value="EMP-002"/>
+            <column name="name" value="Bob Finance"/>
+            <column name="created_by" value="system"/>
+        </insert>
+        <insert tableName="employee">
+            <column name="id" valueNumeric="9003"/>
+            <column name="code" value="EMP-003"/>
+            <column name="name" value="Charlie Audit"/>
+            <column name="created_by" value="system"/>
+        </insert>
+
+        <insert tableName="org_empl">
+            <column name="id" valueNumeric="9101"/>
+            <column name="organization_id" valueNumeric="1"/>
+            <column name="employee_id" valueNumeric="9001"/>
+        </insert>
+        <insert tableName="org_empl">
+            <column name="id" valueNumeric="9102"/>
+            <column name="organization_id" valueNumeric="1"/>
+            <column name="employee_id" valueNumeric="9002"/>
+        </insert>
+        <insert tableName="org_empl">
+            <column name="id" valueNumeric="9103"/>
+            <column name="organization_id" valueNumeric="2"/>
+            <column name="employee_id" valueNumeric="9003"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
