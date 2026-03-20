@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260320150000-1" author="codex" context="dev,test">
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="7840"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGEMPL.MANAGER"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <insert tableName="sec_permission">
+            <column name="id" valueNumeric="7841"/>
+            <column name="role_id" valueNumeric="5000"/>
+            <column name="target_type" value="ATTRIBUTE"/>
+            <column name="target" value="ORGEMPL.IMPORTDATE"/>
+            <column name="action" value="VIEW"/>
+            <column name="effect" value="ALLOW"/>
+        </insert>
+
+        <update tableName="sec_fetch_plan">
+            <column
+                name="definition_json"
+                value='{"scalarAttributes":["id","code","name"],"references":{"emplList":{"scalarAttributes":["id"],"references":{"employee":{"scalarAttributes":["id","name"],"references":{}}}}}}'
+            />
+            <where>entity_name = 'Organization' and code = 'organization-basic'</where>
+        </update>
+
+        <update tableName="sec_fetch_plan">
+            <column
+                name="definition_json"
+                value='{"scalarAttributes":["id","code","name"],"references":{"emplList":{"scalarAttributes":["manager","importDate"],"references":{"employee":{"scalarAttributes":["id","name","code"],"references":{}}}}}}'
+            />
+            <where>entity_name = 'Organization' and code = 'organization-detail'</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

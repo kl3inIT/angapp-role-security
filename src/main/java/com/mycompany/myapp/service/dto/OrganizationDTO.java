@@ -25,7 +25,7 @@ public class OrganizationDTO implements Serializable {
 
     private List<Long> employeeIds;
 
-    private List<EmployeeDTO> employees;
+    private List<OrganizationEmployeeLinkDTO> emplList;
 
     public Long getId() {
         return id;
@@ -67,12 +67,12 @@ public class OrganizationDTO implements Serializable {
         this.employeeIds = employeeIds;
     }
 
-    public List<EmployeeDTO> getEmployees() {
-        return employees;
+    public List<OrganizationEmployeeLinkDTO> getEmplList() {
+        return emplList;
     }
 
-    public void setEmployees(List<EmployeeDTO> employees) {
-        this.employees = employees;
+    public void setEmplList(List<OrganizationEmployeeLinkDTO> emplList) {
+        this.emplList = emplList;
     }
 
     @Override

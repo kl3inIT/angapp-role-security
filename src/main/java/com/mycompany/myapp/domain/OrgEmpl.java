@@ -23,6 +23,28 @@ public class OrgEmpl implements Serializable {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    @Column(name = "import_date")
+    private String importDate;
+
+    @Column(name = "manager")
+    private String manager;
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public String getImportDate() {
+        return importDate;
+    }
+
+    public void setImportDate(String importDate) {
+        this.importDate = importDate;
+    }
+
     public Employee getEmployee() {
         return employee;
     }

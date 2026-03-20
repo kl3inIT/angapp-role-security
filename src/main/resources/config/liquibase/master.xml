@@ -27,6 +27,8 @@
     <include file="config/liquibase/changelog/20260320000000_security_seed_fetch_plans_and_attribute_permissions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260320000001_security_fix_attribute_permission_targets.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260320010001_security_employee_and_org_links.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260320150000_security_fix_organization_detail_fetch_plan.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260320151000_add_org_empl_metadata_columns.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

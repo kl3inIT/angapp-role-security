@@ -10,12 +10,14 @@ import com.mycompany.myapp.repository.OrganizationRepository;
 import com.mycompany.myapp.service.OrganizationService;
 import com.mycompany.myapp.service.dto.EmployeeDTO;
 import com.mycompany.myapp.service.dto.OrganizationDTO;
+import com.mycompany.myapp.service.dto.OrganizationEmployeeLinkDTO;
 import com.mycompany.myapp.service.mapper.OrganizationMapper;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +35,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrganizationServiceImpl.class);
 
-    private static final String LIST_FETCH_PLAN_CODE = "organization-basic";
-
     private static final String DETAIL_FETCH_PLAN_CODE = "organization-detail";
+
+    private static final String LIST_FETCH_PLAN_CODE = DETAIL_FETCH_PLAN_CODE;
 
     private final OrganizationRepository organizationRepository;
 
@@ -159,19 +161,30 @@ public class OrganizationServiceImpl implements OrganizationService {
         }
         Object rawEmployees = values.get("emplList");
         if (rawEmployees instanceof List<?> employees) {
-            dto.setEmployees(
-                employees.stream().filter(Map.class::isInstance).map(Map.class::cast).map(this::toEmployeeDtoFromLink).toList()
-            );
+            List<OrganizationEmployeeLinkDTO> employeeLinks = employees
+                .stream()
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(this::toEmployeeLinkDto)
+                .filter(Objects::nonNull)
+                .toList();
+            dto.setEmplList(employeeLinks);
         }
         return dto;
     }
 
-    private EmployeeDTO toEmployeeDtoFromLink(Map<?, ?> values) {
+    private OrganizationEmployeeLinkDTO toEmployeeLinkDto(Map<?, ?> values) {
+        OrganizationEmployeeLinkDTO dto = new OrganizationEmployeeLinkDTO();
+        dto.setId(asLong(values.get("id")));
+        dto.setManager((String) values.get("manager"));
+        dto.setImportDate((String) values.get("importDate"));
+
         Object employee = values.get("employee");
         if (!(employee instanceof Map<?, ?> employeeValues)) {
             return null;
         }
-        return toEmployeeDto(employeeValues);
+        dto.setEmployee(toEmployeeDto(employeeValues));
+        return dto;
     }
 
     private EmployeeDTO toEmployeeDto(Map<?, ?> values) {

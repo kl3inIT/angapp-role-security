@@ -16,7 +16,7 @@ public interface OrganizationMapper extends EntityMapper<OrganizationDTO, Organi
 
     @Override
     @Mapping(target = "employeeIds", ignore = true)
-    @Mapping(target = "employees", ignore = true)
+    @Mapping(target = "emplList", ignore = true)
     OrganizationDTO toDto(Organization entity);
 
     @Override

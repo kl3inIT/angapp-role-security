@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260320151000-1" author="codex">
+        <addColumn tableName="org_empl">
+            <column name="import_date" type="varchar(255)"/>
+            <column name="manager" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20260320151000-2" author="codex" context="dev,test">
+        <update tableName="org_empl">
+            <column name="import_date" value="2026-03-20"/>
+            <column name="manager" value="Alice Accountant"/>
+            <where>id = 9101</where>
+        </update>
+
+        <update tableName="org_empl">
+            <column name="import_date" value="2026-03-21"/>
+            <column name="manager" value="Bob Finance"/>
+            <where>id = 9102</where>
+        </update>
+
+        <update tableName="org_empl">
+            <column name="import_date" value="2026-03-22"/>
+            <column name="manager" value="Charlie Audit"/>
+            <where>id = 9103</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>
